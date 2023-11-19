@@ -33,13 +33,12 @@ class RegistrationForm extends Component {
 
   changeLastDetails = () => {
     const {lastName} = this.state
-    let error
+    let error = ''
     if (lastName === '') {
       error = '*Required'
       this.setState({lastError: true})
-    } else {
-      error = ''
     }
+    return error
   }
 
   displayResponse = event => {
@@ -51,9 +50,9 @@ class RegistrationForm extends Component {
   }
 
   renderDefault = () => {
-    const {text} = this.changeFirstDetails()
-    const {error} = this.changeLastDetails()
-    const {firstName, lastName} = this.state
+    const {firstName, lastName, firstError, lastError} = this.state
+    const text = firstError ? 'Required' : ''
+    const error = lastError ? 'Required' : ''
 
     return (
       <div>
@@ -87,29 +86,33 @@ class RegistrationForm extends Component {
     )
   }
 
-  renderResponse=()=>{
-      return(
-          (
-        <div>
-          <img
-            src="https://assets.ccbp.in/frontend/react-js/success-icon-img.png"
-            alt="success"
-          />
-          <h1>Submitted Successfully</h1>
-          <button onClick={this.renderDefault}>Submit Another Response</button>
-        </div>
-      )
-      )
-
+  renderResponse = () => {
+    const {isFormSubmitted} = this.state
+    return (
+      <div>
+        {isFormSubmitted && (
+          <div>
+            <img
+              src="https://assets.ccbp.in/frontend/react-js/success-icon-img.png"
+              alt="success"
+            />
+            <p>Submitted Successfully</p>
+            <button onClick={this.renderDefault} type="button">
+              Submit Another Response
+            </button>
+          </div>
+        )}
+      </div>
+    )
   }
 
   render() {
-    const {text} = this.changeFirstDetails()
-    const {error} = this.changeLastDetails()
     const {isFormSubmitted} = this.state
 
-    return(
+    return (
+      <div>
         {isFormSubmitted ? this.renderResponse() : this.renderDefault()}
+      </div>
     )
   }
 }
