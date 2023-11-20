@@ -9,6 +9,8 @@ class RegistrationForm extends Component {
     firstError: false,
     lastError: false,
     isFormSubmitted: false,
+    submitFirst: '',
+    submitLast: '',
   }
 
   changeFirstName = event => {
@@ -42,15 +44,30 @@ class RegistrationForm extends Component {
   }
 
   displayResponse = event => {
-    const {firstError, lastError} = this.state
-    if (firstError === false && lastError === false) {
+    const {firstError, lastError, firstName, lastName} = this.state
+    const errorValue = firstName === '' ? 'Required' : ''
+    const textValue = lastName === '' ? 'Required' : ''
+    if (
+      firstError === false &&
+      lastError === false &&
+      firstName !== '' &&
+      lastName !== ''
+    ) {
       event.preventDefault()
       this.setState({isFormSubmitted: true, firstName: '', lastName: ''})
     }
+    this.setState({submitFirst: errorValue, submitLast: textValue})
   }
 
   renderDefault = () => {
-    const {firstName, lastName, firstError, lastError} = this.state
+    const {
+      firstName,
+      lastName,
+      firstError,
+      lastError,
+      submitFirst,
+      submitLast,
+    } = this.state
     const text = firstError ? 'Required' : ''
     const error = lastError ? 'Required' : ''
 
@@ -69,6 +86,7 @@ class RegistrationForm extends Component {
             onBlur={this.changeFirstDetails}
           />
           <p>{text}</p>
+          <p>{submitFirst}</p>
           <label htmlFor="last">LAST NAME</label>
           <br />
           <input
@@ -80,6 +98,7 @@ class RegistrationForm extends Component {
             onBlur={this.changeLastDetails}
           />
           <p>{error}</p>
+          <p>{submitLast}</p>
           <button type="submit">Submit</button>
         </form>
       </div>
